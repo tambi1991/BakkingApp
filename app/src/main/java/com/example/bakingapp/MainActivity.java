@@ -1,22 +1,19 @@
 package com.example.bakingapp;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-
 import com.example.bakingapp.adapter.RecipeAdapter;
 import com.example.bakingapp.model.Recipe;
 import com.example.bakingapp.rest.RecipeClient;
 import com.example.bakingapp.rest.RecipeService;
-
 import java.util.ArrayList;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,20 +24,18 @@ RecipeService mRecipeService;
 // variable for recycleView adapter
     private RecipeAdapter mAdapter;
     // variable for the recycler view
-    private RecyclerView mRecyclerView;
-
+@BindView(R.id.image_recycler) RecyclerView mRecyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // finding view by ids
-        mRecyclerView = (RecyclerView) findViewById(R.id.image_recycler);
+        ButterKnife.bind(this);
 
         mRecipeService = new RecipeClient().mRecipeService;
         // call the fetchRecipes in onCreate
         new FetchRecipesAsync().execute();
     }
-
     @Override
     public void onClick(Recipe recipe) {
         Context context = this;
@@ -48,9 +43,7 @@ RecipeService mRecipeService;
         Intent intent = new Intent(context,destination);
         intent.putExtra("Recipe",recipe);
         startActivity(intent);
-
     }
-
     private class FetchRecipesAsync extends AsyncTask<Void,Void,Void> {
         @Override
         protected Void doInBackground(Void... voids) {
@@ -58,7 +51,6 @@ RecipeService mRecipeService;
             return null;
         }
     }
-
     // Fetch recipes
     private void fetchRecipes() {
         Call<ArrayList<Recipe>> call = mRecipeService.getRecipes();
@@ -76,9 +68,7 @@ RecipeService mRecipeService;
                 mAdapter = new RecipeAdapter(MainActivity.this, recipe,MainActivity.this);
                 // setting up the adapter
                 mRecyclerView.setAdapter(mAdapter);
-                // initiating the RecipeService
             }
-
             @Override
             public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
                 Log.d("FAILURE", t.toString());

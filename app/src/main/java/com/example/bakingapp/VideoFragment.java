@@ -53,7 +53,6 @@ public class VideoFragment extends Fragment {
           // Initialize the player view.
         mPlayerView = (PlayerView) rootView.findViewById(R.id.player_view);
         mStepDescription = (TextView) rootView.findViewById(R.id.tv_step_description);
-
         // Initialize the player.
         initializePlayer(Uri.parse(mStep.getVideoURL()));
 return rootView;

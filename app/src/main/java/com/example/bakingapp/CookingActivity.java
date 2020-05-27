@@ -30,7 +30,9 @@ public class CookingActivity extends AppCompatActivity {
 
     public void playVideo(Step step) {
         VideoFragment video = new VideoFragment();
-video.initializePlayer(Uri.parse(step.getVideoURL()));
+Bundle stepBundle = new Bundle();
+stepBundle.putParcelable("STEP",step);
+video.setArguments(stepBundle);
 
         // Add the fragment to its container using a FragmentManager and a Transaction
         FragmentManager fragmentManager = getSupportFragmentManager();

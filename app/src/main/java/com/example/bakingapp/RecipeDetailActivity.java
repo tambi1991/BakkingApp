@@ -28,19 +28,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
             closeOnError();
         }
         mRecipe = intentThatStartedThisActivity.getParcelableExtra("Recipe");
-        generateList(mRecipe);
 
     }
-    // retrieving a list of steps from the Recipe clicked
-    private void generateList(Recipe recipe) {
-        if (recipe==null) return;
-        mRecyclerView = findViewById(R.id.step);
-        mRecyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(RecipeDetailActivity.this);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        mAdapter = new RecipeDetailAdapter(RecipeDetailActivity.this, (ArrayList<Step>) recipe.getSteps());
-        mRecyclerView.setAdapter(mAdapter);
-    }
+
     private void closeOnError() {
         finish();
         Toast.makeText(this, " no image available", Toast.LENGTH_SHORT).show();
