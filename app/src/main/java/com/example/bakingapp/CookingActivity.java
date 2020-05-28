@@ -24,24 +24,22 @@ public class CookingActivity extends AppCompatActivity {
         if (intentThatStartedThisActivity == null) {
             closeOnError();
             mStep = intentThatStartedThisActivity.getParcelableExtra("STEP");
-            playVideo(mStep);
         }
-    }
-
-    public void playVideo(Step step) {
         VideoFragment video = new VideoFragment();
-Bundle stepBundle = new Bundle();
-stepBundle.putParcelable("STEP",step);
-video.setArguments(stepBundle);
-
+        Bundle stepBundle = new Bundle();
+        stepBundle.putParcelable("STEP", mStep);
+        video.setArguments(stepBundle);
         // Add the fragment to its container using a FragmentManager and a Transaction
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
-                .add(R.id.video_id,video)
+                .add(R.id.video_id, video)
                 .commit();
-
     }
+
+
+
+
 
     private void closeOnError() {
         finish();

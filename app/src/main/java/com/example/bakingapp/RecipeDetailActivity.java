@@ -1,7 +1,10 @@
 package com.example.bakingapp;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -12,7 +15,7 @@ import java.util.ArrayList;
 
 public class RecipeDetailActivity extends AppCompatActivity {
     // variable for the Recipe
-    private Recipe mRecipe;
+    private Recipe mRecipe = new Recipe();
     // variable for the recyclerView
     RecyclerView mRecyclerView;
     // detail activity adapter
@@ -28,6 +31,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
             closeOnError();
         }
         mRecipe = intentThatStartedThisActivity.getParcelableExtra("Recipe");
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("Details",mRecipe);
+        RecipeDetailFragment fragment = new RecipeDetailFragment();
+        fragment.setArguments(bundle);
+        // Add the fragment to its container using a FragmentManager and a Transaction
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .add(R.id.step_container,fragment)
+                .commit();
 
     }
 
@@ -35,4 +48,5 @@ public class RecipeDetailActivity extends AppCompatActivity {
         finish();
         Toast.makeText(this, " no image available", Toast.LENGTH_SHORT).show();
     }
+
 }

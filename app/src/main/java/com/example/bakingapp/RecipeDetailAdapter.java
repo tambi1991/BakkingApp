@@ -16,10 +16,10 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecipeDetailAdapte
     // source
     ArrayList<Step> mStep;
     // context
-    Context conext;
+    Context context;
 
     public RecipeDetailAdapter(Context context, ArrayList<Step> mStep) {
-        this.conext = context;
+        this.context = context;
         this.mStep = mStep;
     }
     @NonNull
@@ -38,13 +38,14 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecipeDetailAdapte
     public void onBindViewHolder(@NonNull DetailViewHolder holder, final int position) {
    Step type = mStep.get(position);
    holder.description.setText(type.getShortDescription());
+
    holder.itemView.setOnClickListener(new View.OnClickListener() {
        @Override
        public void onClick(View v) {
            Step step = mStep.get(position);
-           Intent intent = new Intent(conext,CookingActivity.class);
+           Intent intent = new Intent(context,CookingActivity.class);
            intent.putExtra("STEP",step);
-           conext.startActivity(intent);
+           context.startActivity(intent);
 
        }
    });

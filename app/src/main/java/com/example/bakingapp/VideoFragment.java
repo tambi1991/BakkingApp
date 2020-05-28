@@ -33,7 +33,7 @@ public class VideoFragment extends Fragment {
     private SimpleExoPlayer mExoPlayer;
     private PlayerView mPlayerView;
     TextView mStepDescription;
-    Step mStep;
+    private Step mStep = new Step();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment
@@ -47,12 +47,15 @@ public class VideoFragment extends Fragment {
      */
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public final View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the Video fragment layout
         View rootView = inflater.inflate(R.layout.video_fragment, container, false);
           // Initialize the player view.
         mPlayerView = (PlayerView) rootView.findViewById(R.id.player_view);
         mStepDescription = (TextView) rootView.findViewById(R.id.tv_step_description);
+
+        Bundle bundle = this.getArguments();
+        mStep = bundle.getParcelable("STEP");
         // Initialize the player.
         initializePlayer(Uri.parse(mStep.getVideoURL()));
 return rootView;
