@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.bakingapp.model.Step;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecipeDetailAdapte
         this.context = context;
         this.mStep = mStep;
     }
+
     @NonNull
     @Override
     public DetailViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,29 +39,29 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecipeDetailAdapte
 
     @Override
     public void onBindViewHolder(@NonNull DetailViewHolder holder, final int position) {
-   Step type = mStep.get(position);
-   holder.description.setText(type.getShortDescription());
+        Step type = mStep.get(position);
+        holder.description.setText(type.getShortDescription());
 
-   holder.itemView.setOnClickListener(new View.OnClickListener() {
-       @Override
-       public void onClick(View v) {
-           Step step = mStep.get(position);
-           Intent intent = new Intent(context,CookingActivity.class);
-           intent.putExtra("STEP",step);
-           context.startActivity(intent);
-
-       }
-   });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Step step = mStep.get(position);
+                Intent intent = new Intent(context, CookingActivity.class);
+                intent.putExtra("STEP", step);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        if(mStep==null) return 0;
+        if (mStep == null) return 0;
         return mStep.size();
     }
 
     class DetailViewHolder extends RecyclerView.ViewHolder {
         TextView description;
+
         public DetailViewHolder(@NonNull View itemView) {
             super(itemView);
             description = (TextView) itemView.findViewById(R.id.description);

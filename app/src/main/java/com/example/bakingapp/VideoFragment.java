@@ -27,9 +27,19 @@ import com.google.android.exoplayer2.util.Util;
 
 
 public class VideoFragment extends Fragment {
+
+
+    public static final String STEP_VIDEO_POSITION =  "step_video_position";
+    public static final String STEP_PLAY_WHEN_READY =  "step_play_when_ready";
+    public static final String STEP_PLAY_BACK_POSITION =  "step_play_back_position";
+    public static final String STEP_CURRENT_WINDOW_INDEX =  "step_current_window_index";
+    public static final String STEP_SINGLE =  "step_single";
+
+
     private boolean playWhenReady = true;
     private int currentWindow = 0;
     private long playbackPosition = 0;
+    private int mCurrentPosition = 0;
     private SimpleExoPlayer mExoPlayer;
     private PlayerView mPlayerView;
     TextView mStepDescription;
@@ -50,24 +60,34 @@ public class VideoFragment extends Fragment {
     public final View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the Video fragment layout
         View rootView = inflater.inflate(R.layout.video_fragment, container, false);
-          // Initialize the player view.
+
+        // Check if there is any state saved
+        if(savedInstanceState != null){
+            mStep = savedInstanceState.getParcelable(STEP_SINGLE);
+            playWhenReady = savedInstanceState.getBoolean(STEP_PLAY_WHEN_READY);
+            mCurrentPosition = savedInstanceState.getInt(STEP_VIDEO_POSITION);
+            currentWindow = savedInstanceState.getInt(STEP_CURRENT_WINDOW_INDEX);
+            playbackPosition = savedInstanceState.getLong(STEP_PLAY_BACK_POSITION);
+        }
+        // Initialize the player view.
         mPlayerView = (PlayerView) rootView.findViewById(R.id.player_view);
         mStepDescription = (TextView) rootView.findViewById(R.id.tv_step_description);
-
         Bundle bundle = this.getArguments();
-        mStep = bundle.getParcelable("STEP");
+        mStep = bundle.getParcelable("video");
+        mStepDescription.setText(mStep.getDescription());
         // Initialize the player.
         initializePlayer(Uri.parse(mStep.getVideoURL()));
-return rootView;
+        return rootView;
     }
 
 
     /**
      * Initialize ExoPlayer.
+     *
      * @param videoUri The URI of the sample to play.
      */
     public void initializePlayer(Uri videoUri) {
-        mStepDescription.setText(mStep.getDescription());
+
         if (mExoPlayer == null) {
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
@@ -77,7 +97,14 @@ return rootView;
             // Prepare the MediaSource.
             Uri uri = videoUri;
             MediaSource mediaSource = buildMediaSource(uri);
-            mExoPlayer.prepare(mediaSource,false,false);
+            // Restore saved position, if available.
+            if (mCurrentPosition > 0) {
+                mExoPlayer.seekTo(mCurrentPosition);
+            } else {
+                // Skipping to 1 shows the first frame of the video.
+                mExoPlayer.seekTo(1);
+            }
+            mExoPlayer.prepare(mediaSource, false, false);
             mExoPlayer.setPlayWhenReady(playWhenReady);
             mExoPlayer.seekTo(currentWindow, playbackPosition);
         }
@@ -89,6 +116,7 @@ return rootView;
         return new ProgressiveMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(uri);
     }
+
     /**
      * Release ExoPlayer.
      */
@@ -126,6 +154,20 @@ return rootView;
         if ((Util.SDK_INT < 24 || mExoPlayer == null)) {
             initializePlayer((Uri.parse(mStep.getVideoURL())));
         }
+        if(mExoPlayer != null){
+            mExoPlayer.setPlayWhenReady(playWhenReady);
+            mExoPlayer.seekTo(mCurrentPosition);
+        }
+    }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelable(STEP_SINGLE, mStep);
+        outState.putLong(STEP_VIDEO_POSITION, mExoPlayer.getCurrentPosition());
+        outState.putLong(STEP_PLAY_BACK_POSITION, mExoPlayer.getCurrentPosition());
+        outState.putBoolean(STEP_PLAY_WHEN_READY, mExoPlayer.getPlayWhenReady());
+        outState.putInt(STEP_CURRENT_WINDOW_INDEX, mExoPlayer.getCurrentWindowIndex());
     }
     private void hideSystemUi() {
         mPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE

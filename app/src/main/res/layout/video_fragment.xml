@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.exoplayer2.ui.PlayerView
-    android:id="@+id/player_view"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/player_view"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
 
     <TextView
         android:id="@+id/tv_step_description"
         android:layout_width="match_parent"
-        android:layout_height="180dp" />
-</com.google.android.exoplayer2.ui.PlayerView>
+        android:layout_height="180dp"
+        android:text="The best food in the world is in Italy"
+        android:textSize="20sp"
+        android:layout_marginTop="50dp"
+        android:textStyle="bold"/>
+</LinearLayout>
+
+
